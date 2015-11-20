@@ -1,14 +1,23 @@
 package se.atroshi.exchange;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import se.atroshi.exchange.Controller.MainController;
 
+
 public class MainActivity extends AppCompatActivity {
+
+    private final String tag = "MainActivity";
+
+    MainController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,10 +25,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        controller = new MainController(this);
+    }
 
 
-        MainController controller = new MainController(this);
+    @Override
+    protected void onStart(){
+        super.onStart();
 
+        // Check if we have old data
+        if(controller.update()){
+
+        }
+
+        // Update database if so
+
+
+
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
     }
 
     @Override
@@ -42,5 +69,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public boolean isOnline() {
+        String context = Context.CONNECTIVITY_SERVICE;
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(context);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void showToast(String msg) {
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

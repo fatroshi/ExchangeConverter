@@ -54,12 +54,6 @@ public class Database {
         if(file.exists()){
             dbExists = true;
             Log.i(tag, "File does EXIST");
-            // Load in data
-            try {
-                setData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }else{
             Log.i(tag, "File does NOT EXIST");
             // Create database
@@ -85,7 +79,7 @@ public class Database {
         }
     }
 
-    public void setData() throws IOException {
+    public void getData() throws IOException {
 
         try {
             FileInputStream fis = mainActivity.openFileInput(this.dbName);
@@ -110,20 +104,20 @@ public class Database {
     }
 
     public  List<CubeXML> getCubes(){
-        return this.cubes;
+        try {
+            // Load in the data from file
+            this.getData();
+            return this.cubes;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     public Date getTimeStamp(){
         if(this.cubes.size() > 0) {
-            String strDate = this.cubes.get(0).getDate();
-            DateFormat format = new SimpleDateFormat(strDate, Locale.ENGLISH);
-            Date date = null;
-            try {
-                date = format.parse(strDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            Date date = getCubes().get(0).getDate();
             return date;
         }else{
             return null;

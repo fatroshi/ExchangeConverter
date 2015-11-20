@@ -55,6 +55,8 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
 
     protected void onPostExecute(Long result)
     {
+        showToast("Download finished");
+
         this.gui.addItemsOnSpinner(this.cubeParser.getCubes());
 
         try {

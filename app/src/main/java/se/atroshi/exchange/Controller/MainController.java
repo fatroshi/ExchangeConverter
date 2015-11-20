@@ -3,6 +3,7 @@ package se.atroshi.exchange.Controller;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,72 +25,42 @@ public class MainController {
     private MainActivity mainActivity;
     private Database db;
     private CubeXmlPullParser parser;
+    private StreamFromFile streamFromFile;
     private Gui gui;
 
 
     public MainController(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         // Connect to database
-        this.db = new Database(this.mainActivity);
+        //this.db = new Database(this.mainActivity);
 
         //
         gui = new Gui(mainActivity);
 
-        start();
+        parser = new CubeXmlPullParser();
+        streamFromFile = new StreamFromFile(this.mainActivity,parser,gui);
+        streamFromFile.execute();
 
     }
 
-    public void start(){
-        // Skriv om den har lite flummugt... borde forst kolla update sen.. kolla om vi ar anslutna till internet.
-        // for lasa fil gor vi i tva fall, da internet inte finns och nar datan ar fortfarande farskt.
-
-        if(isOnline()){
-            // We are connected to the internet
-            // Check date, need to update?
-            if(update() || db.getCubes().size() == 0){
-                // We nee to update our database, newer xml file available
-                this.parser = new CubeXmlPullParser();
-                // Stream the file, pars data, store in db, update gui with new information
-                StreamFromFile sff = new StreamFromFile(this.mainActivity,this.parser,this.gui);
-                sff.execute();
-            }else{
-                this.gui.addItemsOnSpinner(db.getCubes());
-            }
-        }else{
-            if(db.getCubes().size() == 0){
-                // Tell user that we need to be connected to the interner
-            }else{
-                this.gui.addItemsOnSpinner(db.getCubes());
-                // Tell user old data
-                // well... if data is still less than 24h old.. maybe we should not tell anything
-                // don't know ! call update method again?!
-            }
-        }
-    }
 
     public boolean update(){
         boolean update = false;
 
-        /*
-        if(db.getCubes().size() > 0) {
+        // Get current date
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        //get current date time with Date()
+        Date date = new Date();
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date currentDate = new Date();
-            System.out.println(dateFormat.format(currentDate));
+        Log.i(tag, String.valueOf(date));
 
-            if (currentDate.before(db.getTimeStamp())) {
-               update = true;
-            }
-        }
-        */
-        return true;
+        // Compare to date in db
+
+
+        return update;
     }
 
-    public boolean isOnline() {
-        String context = Context.CONNECTIVITY_SERVICE;
-        ConnectivityManager cm = (ConnectivityManager) mainActivity.getSystemService(context);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
+
+
 
 }

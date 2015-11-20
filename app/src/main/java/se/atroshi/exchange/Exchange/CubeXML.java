@@ -1,27 +1,28 @@
 package se.atroshi.exchange.Exchange;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Farhad on 11/11/15.
  */
 public class CubeXML implements Serializable {
 
-    private String date;
+    private Date date;
     private double rate;
     private String currency;
 
-    public CubeXML(String date, String currency, double rate){
+    public CubeXML(Date date, String currency, double rate){
         this.date = date;
         this.rate = rate;
         this.currency = currency;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
