@@ -60,9 +60,9 @@ public class MainController {
             Date oldDate = db.getTimeStamp();
             Date newDate = new Date();
 
-            Long hourDiffernce = differenceInHours(oldDate,newDate);
+            long hours = differenceInHours(oldDate,newDate);
 
-            if(hourDiffernce > 24){
+            if(hours > 24){
                 Log.i(tag, "Wer need to update our data");
             }
 
