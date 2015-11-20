@@ -1,22 +1,15 @@
 package se.atroshi.exchange.Controller;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import android.widget.Toast;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import se.atroshi.exchange.Design.*;
 import se.atroshi.exchange.Exchange.CubeXmlPullParser;
 import se.atroshi.exchange.FileStream.Database;
 import se.atroshi.exchange.FileStream.StreamFromFile;
 import se.atroshi.exchange.MainActivity;
-
 
 /**
  * Created by Farhad on 18/11/15.
@@ -39,12 +32,7 @@ public class MainController {
         //
         gui = new Gui(mainActivity);
         parser = new CubeXmlPullParser();
-        streamFromFile = new StreamFromFile(this.mainActivity,parser,gui);
-        streamFromFile.execute();
-
-
     }
-
 
     public boolean update(){
         boolean update = false;
@@ -52,9 +40,8 @@ public class MainController {
         if(db.iseEmpty()){
             //
             Log.i(tag,"The database is empty we need stream url...");
-            // Stream xml from url, pars data, save in db, update gui
-            streamFromFile = new StreamFromFile(this.mainActivity,parser,gui);
-            streamFromFile.execute();
+            //
+            this.updateApp();
         }else{
 
             Date oldDate = db.getTimeStamp();
@@ -63,13 +50,28 @@ public class MainController {
             long hours = differenceInHours(oldDate,newDate);
 
             if(hours > 24){
-                Log.i(tag, "Wer need to update our data");
+                Log.i(tag, "We need to update our data");
+                this.updateApp();
             }
 
         }
 
-
         return update;
+    }
+
+    public void updateApp(){
+        // Check if we have internet
+        if(isOnline()) {
+            // Stream xml from url, pars data, save in db, update gui
+            streamFromFile = new StreamFromFile(this.mainActivity, parser, gui);
+            streamFromFile.execute();
+            showToast("App has been updated");
+        }else{
+            showToast("Sorry no internet connection...");
+            showToast("Using old database...");
+            gui.addItemsOnSpinner(db.getCubes());
+
+        }
     }
 
     /**
@@ -88,6 +90,18 @@ public class MainController {
 
         return different/hoursInMilli;
 
+    }
+
+    public boolean isOnline() {
+        String context = Context.CONNECTIVITY_SERVICE;
+        ConnectivityManager cm = (ConnectivityManager) mainActivity.getSystemService(context);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    private void showToast(String msg) {
+        Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }

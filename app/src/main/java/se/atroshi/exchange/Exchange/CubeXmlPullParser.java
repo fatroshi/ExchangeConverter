@@ -115,12 +115,12 @@ public class CubeXmlPullParser implements Serializable {
 
         try {
             date = format.parse(tmpDate);
-            return date;
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return date;
     }
 }
 

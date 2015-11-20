@@ -32,11 +32,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-
         // Check if we have old data
-        if(controller.update()){
-
-        }
+        // Update database, gui if we have old data
+        controller.update();
 
         // Update database if so
 
@@ -69,14 +67,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public boolean isOnline() {
-        String context = Context.CONNECTIVITY_SERVICE;
-        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(context);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private void showToast(String msg) {

@@ -2,6 +2,7 @@ package se.atroshi.exchange.FileStream;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,13 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import se.atroshi.exchange.Exchange.CubeXML;
 import se.atroshi.exchange.MainActivity;
@@ -103,16 +100,23 @@ public class Database {
         fos.close();
     }
 
-    public  List<CubeXML> getCubes(){
+    public List<CubeXML> getCubes(){
+
+        Log.i(tag,"getCubes()");
+
+        List<CubeXML> tmpCubes = null;
+        showToast("Set tmpCubes = null");
         try {
             // Load in the data from file
             this.getData();
-            return this.cubes;
+            tmpCubes = this.cubes;
+            showToast("Set tmpCubes = cubes");
+
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
-        }
 
+        }
+        return tmpCubes;
     }
 
     public Date getTimeStamp(){
@@ -129,7 +133,7 @@ public class Database {
 
     public boolean iseEmpty(){
         boolean isEmpty = true;
-        if(getCubes().size() > 0){
+        if(this.cubes.size() > 0){
             isEmpty = false;
         }
 
@@ -139,4 +143,10 @@ public class Database {
     public void output(String s){
         Log.i(tag, s);
     }
+
+    private void showToast(String msg) {
+        Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
 }
