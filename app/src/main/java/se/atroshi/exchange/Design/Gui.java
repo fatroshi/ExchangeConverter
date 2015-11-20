@@ -35,6 +35,11 @@ public class Gui extends AppCompatActivity {
     private double fromRate;
     private double quantity;
 
+    // Store currency
+    private final List<String> currencyList = new ArrayList<>();
+    // Store rate
+    private final List<Double> rateList = new ArrayList<>();
+
 
     public Gui(MainActivity mainActivity, MainController controller){
         this.mainActivity = mainActivity;
@@ -43,8 +48,22 @@ public class Gui extends AppCompatActivity {
 
     }
 
+
+    public List<Double> getRateList(){
+        return this.rateList;
+    }
+
     public void showResult(){
-        txtResult.setText(String.valueOf(exchangeConvert()));
+        double result = exchangeConvert();
+
+        if(result > 0){
+            txtResult.setText("Converted: " + String.valueOf(result));
+        }else{
+            txtResult.setText("");
+
+        }
+
+
     }
 
     public double getToRate() {
@@ -90,9 +109,7 @@ public class Gui extends AppCompatActivity {
 
         if(this.quantity > 0){
             cash = this.fromRate * this.quantity;
-            //showToast("Cash: " + String.valueOf(cash));
             result = cash / this.toRate;
-            showToast("Result: " + String.valueOf(result));
         }
 
         return result;
@@ -100,15 +117,12 @@ public class Gui extends AppCompatActivity {
 
     // add items into spinner dynamically
     public void addItemsOnSpinner(List<CubeXML> cubes) {
-        // Store currency
-        final List<String> currencyList = new ArrayList<>();
-        // Store rate
-        final List<Double> rateList = new ArrayList<>();
+
 
         // Add to the lists
         for(CubeXML cube: cubes){
-            currencyList.add(cube.getCurrency());
-            rateList.add(cube.getRate());
+            this.currencyList.add(cube.getCurrency());
+            this.rateList.add(cube.getRate());
         }
         // Populate the spinners
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this.mainActivity, android.R.layout.simple_spinner_item, currencyList);
@@ -118,10 +132,10 @@ public class Gui extends AppCompatActivity {
         toSpinner.setAdapter(dataAdapter);
 
         // Get selected item in spinner list
-        fromSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.fromRate,rateList,this.controller,this));
+        fromSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.controller,this));
 
         // Get selected item in spinner list
-        toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.toRate,rateList,this.controller,this));
+        toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.controller,this));
     }
 
 
