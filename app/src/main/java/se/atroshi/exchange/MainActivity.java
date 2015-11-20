@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private final String tag = "MainActivity";
 
     MainController controller;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        controller = new MainController(this);
+        bundle = savedInstanceState;
+        controller = new MainController(this,bundle);
     }
 
 
@@ -73,4 +75,6 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
         toast.show();
     }
+
+
 }

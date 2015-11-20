@@ -1,4 +1,6 @@
 package se.atroshi.exchange.Design;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,15 +16,16 @@ import se.atroshi.exchange.R;
 /**
  * Created by Farhad on 17/11/15.
  */
-public class Gui {
+public class Gui extends AppCompatActivity {
 
     Spinner fromSpinner;
     Spinner toSpinner;
-
     MainActivity mainActivity;
+    Bundle bundle;
 
-    public Gui(MainActivity mainActivity){
+    public Gui(MainActivity mainActivity, Bundle bundle){
         this.mainActivity = mainActivity;
+        this.bundle = bundle;
     }
 
 
@@ -33,7 +36,7 @@ public class Gui {
         toSpinner = (Spinner) this.mainActivity.findViewById(R.id.toSpinner);
 
         // Store currency
-        List<String> currencyList = new ArrayList<>();
+        final List<String> currencyList = new ArrayList<>();
         // Store rate
         final List<Double> rateList = new ArrayList<>();
 
@@ -78,4 +81,32 @@ public class Gui {
         });
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        long selectedId = toSpinner.getSelectedItemId();
+
+        outState.putLong("param", selectedId);
+        // do this for each or your Spinner
+        // You might consider using Bundle.putStringArray() instead
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // initialize all your visual fields
+        if (savedInstanceState != null) {
+            Long selectedId = savedInstanceState.getLong("param");
+            // do this for each of your text views
+            toSpinner.post(new Runnable() {
+                @Override
+                public void run() {
+                    toSpinner.setSelection(2);
+                }
+            });
+        }
+    }
+
 }

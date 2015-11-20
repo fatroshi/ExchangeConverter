@@ -18,8 +18,8 @@ import se.atroshi.exchange.MainActivity;
  */
 public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
 
-    private final String urlString = "http://maceo.sth.kth.se/Home/";
-    private final String fileName = "eurofxref";
+    private final String urlString = "http://www.ecb.europa.eu/stats/eurofxref/";
+    private final String fileName = "eurofxref-daily.xml";
 
     private String tag = "StreamFromFile";
     private MainActivity mainActivity;

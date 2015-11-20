@@ -2,6 +2,7 @@ package se.atroshi.exchange.Controller;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import java.util.Date;
@@ -18,28 +19,30 @@ public class MainController {
 
     private String tag = "MainController";
     private MainActivity mainActivity;
+    private Bundle bundle;
     private Database db;
     private CubeXmlPullParser parser;
     private StreamFromFile streamFromFile;
     private Gui gui;
 
 
-    public MainController(MainActivity mainActivity){
+    public MainController(MainActivity mainActivity, Bundle bundle){
         this.mainActivity = mainActivity;
+        this.bundle = bundle;
         // Connect to database
         this.db = new Database(this.mainActivity);
 
         //
-        gui = new Gui(mainActivity);
+        gui = new Gui(this.mainActivity, this.bundle);
         parser = new CubeXmlPullParser();
     }
 
     public boolean update(){
         boolean update = false;
 
-        if(db.iseEmpty()){
+        if(db.isEmpty()){
             //
-            Log.i(tag,"The database is empty we need stream url...");
+            Log.i(tag, "The database is empty we need stream url...");
             //
             this.updateApp();
         }else{
@@ -52,6 +55,8 @@ public class MainController {
             if(hours > 24){
                 Log.i(tag, "We need to update our data");
                 this.updateApp();
+            }else{
+                gui.addItemsOnSpinner(db.getCubes());
             }
 
         }
@@ -68,8 +73,15 @@ public class MainController {
             showToast("App has been updated");
         }else{
             showToast("Sorry no internet connection...");
-            showToast("Using old database...");
-            gui.addItemsOnSpinner(db.getCubes());
+
+
+            if(db.getCubes().size() > 0){
+                showToast("Using old database...");
+                gui.addItemsOnSpinner(db.getCubes());
+            }else{
+                showToast("Please connect to the internet...");
+            }
+
 
         }
     }

@@ -101,20 +101,13 @@ public class Database {
     }
 
     public List<CubeXML> getCubes(){
-
-        Log.i(tag,"getCubes()");
-
         List<CubeXML> tmpCubes = null;
-        showToast("Set tmpCubes = null");
         try {
             // Load in the data from file
             this.getData();
             tmpCubes = this.cubes;
-            showToast("Set tmpCubes = cubes");
-
         } catch (IOException e) {
             e.printStackTrace();
-
         }
         return tmpCubes;
     }
@@ -131,12 +124,19 @@ public class Database {
         return date;
     }
 
-    public boolean iseEmpty(){
-        boolean isEmpty = true;
-        if(this.cubes.size() > 0){
-            isEmpty = false;
-        }
+    public boolean isEmpty(){
 
+        boolean isEmpty = true;
+
+        try {
+            this.getData();
+            if(this.cubes.size() > 0){
+                isEmpty = false;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return isEmpty;
     }
 
