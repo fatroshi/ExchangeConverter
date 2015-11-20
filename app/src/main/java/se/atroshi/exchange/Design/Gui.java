@@ -45,7 +45,6 @@ public class Gui extends AppCompatActivity {
         this.mainActivity = mainActivity;
         this.controller = controller;
         this.connectElements();
-
     }
 
 
@@ -55,14 +54,12 @@ public class Gui extends AppCompatActivity {
 
     public void showResult(){
         double result = exchangeConvert();
-
         if(result > 0){
+            result = roundDouble(result, 3);
             txtResult.setText("Converted: " + String.valueOf(result));
         }else{
             txtResult.setText("");
-
         }
-
 
     }
 
@@ -160,5 +157,21 @@ public class Gui extends AppCompatActivity {
     private void showToast(String msg) {
         Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    /**
+     * Found at: http://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+     *
+     * @param value The value that we want to round
+     * @param places Max decimals of the returned value
+     * @return the value
+     */
+    public static double roundDouble(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }
