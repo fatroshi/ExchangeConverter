@@ -1,24 +1,19 @@
 package se.atroshi.exchange.Design;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
+
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import se.atroshi.exchange.Controller.MainController;
 import se.atroshi.exchange.Exchange.CubeXML;
 import se.atroshi.exchange.Listeners.FromSpinnerListener;
+import se.atroshi.exchange.Listeners.ToSpinnerListener;
+import se.atroshi.exchange.Listeners.UserInputListener;
 import se.atroshi.exchange.MainActivity;
 import se.atroshi.exchange.R;
 
@@ -44,12 +39,12 @@ public class Gui extends AppCompatActivity {
     public Gui(MainActivity mainActivity, MainController controller){
         this.mainActivity = mainActivity;
         this.controller = controller;
+        this.connectElements();
 
     }
 
     public void showResult(){
-        this.txtResult = (TextView) this.mainActivity.findViewById(R.id.result);
-        txtResult.setText(String.valueOf(this.fromRate));
+        txtResult.setText(String.valueOf(exchangeConvert()));
     }
 
     public double getToRate() {
@@ -76,59 +71,35 @@ public class Gui extends AppCompatActivity {
         this.quantity = quantity;
     }
 
-    public void setResult(final double fromRate, final double toRate){
+    public void connectElements(){
         this.txtResult = (TextView) this.mainActivity.findViewById(R.id.result);
         this.txtQuantity = (EditText) this.mainActivity.findViewById(R.id.inputText);
 
+        this.fromSpinner = (Spinner) this.mainActivity.findViewById(R.id.fromSpinner);
+        this.toSpinner = (Spinner) this.mainActivity.findViewById(R.id.toSpinner);
 
-        txtQuantity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String userInput = txtQuantity.getText().toString();
-
-                try{
-                    quantity = Double.parseDouble(userInput);
-                    String strResult = String.valueOf(exchangeConvert(fromRate,toRate,quantity));
-                    txtResult.setText(strResult);
-
-                }catch (NumberFormatException e){
-                    showToast("Only digits are accepted");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
-
-        //
-
-        //result.setText(strResult);
+        txtQuantity.addTextChangedListener(new UserInputListener(this.controller,this));
 
     }
 
 
-    public double exchangeConvert(double fromRate, double toRate, double quantity){
+    public double exchangeConvert(){
 
-        double cash = fromRate * quantity;
-        double result = cash / toRate;
+        double cash = 0;
+        double result = 0;
+
+        if(this.quantity > 0){
+            cash = this.fromRate * this.quantity;
+            //showToast("Cash: " + String.valueOf(cash));
+            result = cash / this.toRate;
+            showToast("Result: " + String.valueOf(result));
+        }
+
         return result;
     }
 
     // add items into spinner dynamically
     public void addItemsOnSpinner(List<CubeXML> cubes) {
-
-        fromSpinner = (Spinner) this.mainActivity.findViewById(R.id.fromSpinner);
-        toSpinner = (Spinner) this.mainActivity.findViewById(R.id.toSpinner);
-
         // Store currency
         final List<String> currencyList = new ArrayList<>();
         // Store rate
@@ -150,7 +121,7 @@ public class Gui extends AppCompatActivity {
         fromSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.fromRate,rateList,this.controller,this));
 
         // Get selected item in spinner list
-        toSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.fromRate,rateList,this.controller,this));
+        toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.toRate,rateList,this.controller,this));
     }
 
 
