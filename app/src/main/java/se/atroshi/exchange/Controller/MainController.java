@@ -33,7 +33,7 @@ public class MainController {
         this.db = new Database(this.mainActivity);
 
         //
-        gui = new Gui(this.mainActivity, this.bundle);
+        gui = new Gui(this.mainActivity, this);
         parser = new CubeXmlPullParser();
     }
 
@@ -73,7 +73,6 @@ public class MainController {
             showToast("App has been updated");
         }else{
             showToast("Sorry no internet connection...");
-
 
             if(db.getCubes().size() > 0){
                 showToast("Using old database...");
@@ -116,4 +115,7 @@ public class MainController {
         toast.show();
     }
 
+    public void showConvertedResult(){
+        this.gui.showResult();
+    }
 }

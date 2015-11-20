@@ -1,16 +1,24 @@
 package se.atroshi.exchange.Design;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import se.atroshi.exchange.Controller.MainController;
 import se.atroshi.exchange.Exchange.CubeXML;
+import se.atroshi.exchange.Listeners.FromSpinnerListener;
 import se.atroshi.exchange.MainActivity;
 import se.atroshi.exchange.R;
 
@@ -19,16 +27,101 @@ import se.atroshi.exchange.R;
  */
 public class Gui extends AppCompatActivity {
 
-    Spinner fromSpinner;
-    Spinner toSpinner;
-    MainActivity mainActivity;
-    Bundle bundle;
 
-    public Gui(MainActivity mainActivity, Bundle bundle){
+    private MainActivity mainActivity;
+    private MainController controller;
+
+    private Spinner fromSpinner;
+    private Spinner toSpinner;
+    private TextView txtResult;
+    private EditText txtQuantity;
+
+    private double toRate;
+    private double fromRate;
+    private double quantity;
+
+
+    public Gui(MainActivity mainActivity, MainController controller){
         this.mainActivity = mainActivity;
-        this.bundle = bundle;
+        this.controller = controller;
+
     }
 
+    public void showResult(){
+        this.txtResult = (TextView) this.mainActivity.findViewById(R.id.result);
+        txtResult.setText(String.valueOf(this.fromRate));
+    }
+
+    public double getToRate() {
+        return toRate;
+    }
+
+    public void setToRate(double toRate) {
+        this.toRate = toRate;
+    }
+
+    public double getFromRate() {
+        return fromRate;
+    }
+
+    public void setFromRate(double fromRate) {
+        this.fromRate = fromRate;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setResult(final double fromRate, final double toRate){
+        this.txtResult = (TextView) this.mainActivity.findViewById(R.id.result);
+        this.txtQuantity = (EditText) this.mainActivity.findViewById(R.id.inputText);
+
+
+        txtQuantity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String userInput = txtQuantity.getText().toString();
+
+                try{
+                    quantity = Double.parseDouble(userInput);
+                    String strResult = String.valueOf(exchangeConvert(fromRate,toRate,quantity));
+                    txtResult.setText(strResult);
+
+                }catch (NumberFormatException e){
+                    showToast("Only digits are accepted");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
+        //
+
+        //result.setText(strResult);
+
+    }
+
+
+    public double exchangeConvert(double fromRate, double toRate, double quantity){
+
+        double cash = fromRate * quantity;
+        double result = cash / toRate;
+        return result;
+    }
 
     // add items into spinner dynamically
     public void addItemsOnSpinner(List<CubeXML> cubes) {
@@ -49,38 +142,15 @@ public class Gui extends AppCompatActivity {
         // Populate the spinners
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this.mainActivity, android.R.layout.simple_spinner_item, currencyList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         fromSpinner.setAdapter(dataAdapter);
         toSpinner.setAdapter(dataAdapter);
 
         // Get selected item in spinner list
-        fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                double value = rateList.get(arg2);
-                Log.i("Selected", String.valueOf(value));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
+        fromSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.fromRate,rateList,this.controller,this));
 
         // Get selected item in spinner list
-        toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                double value = rateList.get(arg2);
-                Log.i("Selected", String.valueOf(value));
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-
+        toSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.fromRate,rateList,this.controller,this));
     }
 
 
@@ -102,4 +172,8 @@ public class Gui extends AppCompatActivity {
         }
     }
 
+    private void showToast(String msg) {
+        Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
+        toast.show();
+    }
 }
