@@ -83,27 +83,6 @@ public class Gui extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        long selectedId = toSpinner.getSelectedItemId();
-
-        outState.putLong("param", selectedId);
-        // do this for each or your Spinner
-        // You might consider using Bundle.putStringArray() instead
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // initialize all your visual fields
-        if (savedInstanceState != null) {
-            Long selectedId = savedInstanceState.getLong("param");
-            selectSpinnerItemByValue(toSpinner,selectedId);
-        }
-    }
-
 
     /**
      * http://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
