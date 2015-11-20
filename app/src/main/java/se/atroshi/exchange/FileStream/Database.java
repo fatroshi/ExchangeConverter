@@ -116,14 +116,24 @@ public class Database {
     }
 
     public Date getTimeStamp(){
+
+        Date date = null;
+
         if(this.cubes.size() > 0) {
-            Date date = getCubes().get(0).getDate();
+            date = getCubes().get(0).getDate();
             return date;
-        }else{
-            return null;
         }
 
+        return date;
+    }
 
+    public boolean iseEmpty(){
+        boolean isEmpty = true;
+        if(getCubes().size() > 0){
+            isEmpty = false;
+        }
+
+        return isEmpty;
     }
 
     public void output(String s){

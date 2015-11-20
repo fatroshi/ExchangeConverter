@@ -6,8 +6,10 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import se.atroshi.exchange.Design.*;
 import se.atroshi.exchange.Exchange.CubeXmlPullParser;
@@ -32,14 +34,14 @@ public class MainController {
     public MainController(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         // Connect to database
-        //this.db = new Database(this.mainActivity);
+        this.db = new Database(this.mainActivity);
 
         //
         gui = new Gui(mainActivity);
-
         parser = new CubeXmlPullParser();
         streamFromFile = new StreamFromFile(this.mainActivity,parser,gui);
         streamFromFile.execute();
+
 
     }
 
@@ -47,20 +49,45 @@ public class MainController {
     public boolean update(){
         boolean update = false;
 
-        // Get current date
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        //get current date time with Date()
-        Date date = new Date();
+        if(db.iseEmpty()){
+            //
+            Log.i(tag,"The database is empty we need stream url...");
+            // Stream xml from url, pars data, save in db, update gui
+            streamFromFile = new StreamFromFile(this.mainActivity,parser,gui);
+            streamFromFile.execute();
+        }else{
 
-        Log.i(tag, String.valueOf(date));
+            Date oldDate = db.getTimeStamp();
+            Date newDate = new Date();
 
-        // Compare to date in db
+            Long hourDiffernce = differenceInHours(oldDate,newDate);
+
+            if(hourDiffernce > 24){
+                Log.i(tag, "Wer need to update our data");
+            }
+
+        }
 
 
         return update;
     }
 
+    /**
+     *
+     * @param startDate
+     * @param endDate
+     */
 
+    public long differenceInHours(Date startDate, Date endDate){
 
+        long different = endDate.getTime() - startDate.getTime();
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+
+        return different/hoursInMilli;
+
+    }
 
 }
