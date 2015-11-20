@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,13 +100,26 @@ public class Gui extends AppCompatActivity {
         // initialize all your visual fields
         if (savedInstanceState != null) {
             Long selectedId = savedInstanceState.getLong("param");
-            // do this for each of your text views
-            toSpinner.post(new Runnable() {
-                @Override
-                public void run() {
-                    toSpinner.setSelection(2);
-                }
-            });
+            selectSpinnerItemByValue(toSpinner,selectedId);
+        }
+    }
+
+
+    /**
+     * http://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
+     * @param spnr
+     * @param value
+     */
+    public static void selectSpinnerItemByValue(Spinner spnr, long value)
+    {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
+        for (int position = 0; position < adapter.getCount(); position++)
+        {
+            if(adapter.getItemId(position) == value)
+            {
+                spnr.setSelection(position);
+                return;
+            }
         }
     }
 
