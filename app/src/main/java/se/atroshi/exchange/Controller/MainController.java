@@ -69,6 +69,8 @@ public class MainController {
 
     public boolean update(){
         boolean update = false;
+
+        /*
         if(db.getCubes().size() > 0) {
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -79,7 +81,8 @@ public class MainController {
                update = true;
             }
         }
-        return update;
+        */
+        return true;
     }
 
     public boolean isOnline() {

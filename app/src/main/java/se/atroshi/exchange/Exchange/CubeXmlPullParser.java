@@ -60,12 +60,12 @@ public class CubeXmlPullParser implements Serializable {
                         if(tagName.equalsIgnoreCase(KEY_CUBE)) {
                             if(tmpDate == null){
 
-                                tmpDate = xpp.getAttributeValue(null, KEY_DATE);
-                                date = tmpDate + " HH:mm:ss";
+                                date = xpp.getAttributeValue(null, KEY_DATE);
+                                //date = tmpDate + " HH:mm:ss";
                                 //date = tmpDate;
-                                SimpleDateFormat sdf = new SimpleDateFormat(date);
-                                date = sdf.format(new Date());
-                                Log.i(tag,date);
+                                //SimpleDateFormat sdf = new SimpleDateFormat(date);
+                                //date = sdf.format(new Date());
+                                //Log.i(tag,date);
                             }
                             String currency = xpp.getAttributeValue(null, KEY_CURRENCY);
                             String rate = xpp.getAttributeValue(null, KEY_RATE);
