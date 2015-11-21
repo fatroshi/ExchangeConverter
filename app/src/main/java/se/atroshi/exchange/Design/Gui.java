@@ -1,6 +1,5 @@
 package se.atroshi.exchange.Design;
 import android.support.v7.app.AppCompatActivity;
-
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
@@ -115,12 +114,15 @@ public class Gui extends AppCompatActivity {
 
     public double exchangeConvert(){
 
-        double cash = 0;
+        //double cash = 0;
         double result = 0;
 
         if(this.quantity > 0){
-            cash = this.fromRate * this.quantity;
-            result = cash / this.toRate;
+            result = (this.toRate / this.fromRate) * this.quantity;
+
+            //showToast(String.valueOf(this.fromRate) + " * " + String.valueOf(this.quantity));
+            //showToast(String.valueOf(cash) + " / " + String.valueOf(this.toRate));
+            //result = cash / this.toRate;
         }
 
         return result;

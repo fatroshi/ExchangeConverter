@@ -86,9 +86,8 @@ public class CubeXmlPullParser implements Serializable {
                 eventType = xpp.next();
             }
 
-            for(CubeXML cube: cubes){
-                Log.i("Object", cube.toString());
-            }
+            // Add euro
+            cubes.add(new CubeXML(date, "Euro",1));
 
         } catch (XmlPullParserException e) {
             e.printStackTrace();
