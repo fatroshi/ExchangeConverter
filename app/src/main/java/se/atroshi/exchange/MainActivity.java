@@ -5,15 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import se.atroshi.exchange.Controller.MainController;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private final String tag = "MainActivity";
-
     MainController controller;
     Bundle bundle;
 
@@ -34,11 +31,6 @@ public class MainActivity extends AppCompatActivity {
         // Check if we have old data
         // Update database, gui if we have old data
         controller.update();
-
-        // Update database if so
-
-
-
     }
 
     @Override
@@ -67,11 +59,5 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    private void showToast(String msg) {
-        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
 
 }

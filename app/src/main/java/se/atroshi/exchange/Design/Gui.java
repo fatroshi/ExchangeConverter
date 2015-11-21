@@ -31,6 +31,8 @@ public class Gui extends AppCompatActivity {
     private TextView txtResult;
     private EditText txtQuantity;
 
+
+    private String toCurrency;
     private double toRate;
     private double fromRate;
     private double quantity;
@@ -44,7 +46,7 @@ public class Gui extends AppCompatActivity {
     public Gui(MainActivity mainActivity, MainController controller){
         this.mainActivity = mainActivity;
         this.controller = controller;
-        this.connectElements();
+        this.connectGuiElements();
     }
 
 
@@ -52,11 +54,15 @@ public class Gui extends AppCompatActivity {
         return this.rateList;
     }
 
+    public List<String> getCurrencyList(){
+        return this.currencyList;
+    }
+
     public void showResult(){
         double result = exchangeConvert();
         if(result > 0){
             result = roundDouble(result, 3);
-            txtResult.setText("Converted: " + String.valueOf(result));
+            txtResult.setText("Converted: " + String.valueOf(result) + " " + getToCurrency());
         }else{
             txtResult.setText("");
         }
@@ -65,6 +71,14 @@ public class Gui extends AppCompatActivity {
 
     public double getToRate() {
         return toRate;
+    }
+
+    public void setToCurrency(String s){
+        this.toCurrency = s;
+    }
+
+    public String getToCurrency(){
+        return this.toCurrency;
     }
 
     public void setToRate(double toRate) {
@@ -87,7 +101,7 @@ public class Gui extends AppCompatActivity {
         this.quantity = quantity;
     }
 
-    public void connectElements(){
+    public void connectGuiElements(){
         this.txtResult = (TextView) this.mainActivity.findViewById(R.id.result);
         this.txtQuantity = (EditText) this.mainActivity.findViewById(R.id.inputText);
 
