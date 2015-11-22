@@ -1,15 +1,12 @@
 package se.atroshi.exchange;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Spinner;
 import android.widget.Toast;
 import se.atroshi.exchange.Controller.MainController;
-import se.atroshi.exchange.Design.Gui;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putInt("fromSpinner", fromSpinner.getSelectedItemPosition());
     }
 
-
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -50,10 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.controller.getGui().selectSpinnerItemByValue(toSpinner, toSpinnerPosition);
         this.controller.getGui().selectSpinnerItemByValue(fromSpinner, fromSpinnerPosition);
-
-
     }
-
 
     @Override
     protected void onStart(){
@@ -61,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         // Check if we have old data
         // Update database, gui if we have old data
         controller.update();
-
-
     }
 
     @Override
