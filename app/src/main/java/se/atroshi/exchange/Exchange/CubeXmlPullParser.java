@@ -77,7 +77,7 @@ public class CubeXmlPullParser implements Serializable {
                                 // Create new object
                                 date = createDate(strDate);                             // Create date
                                 double doubleRate = Double.parseDouble(rate);           // Convert string to double
-                                cubes.add(new CubeXML(date,currency, doubleRate));      // Create object and store in list
+                                cubes.add(new CubeXML(new Date(),currency, doubleRate));      // Create object and store in list
                             }
                         }
                         break;

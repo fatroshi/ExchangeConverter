@@ -165,18 +165,7 @@ public class Gui extends AppCompatActivity {
      */
     public void selectSpinnerItemByValue(Spinner spnr, int value)
     {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
         spnr.setSelection(value);
-//
-//
-//        for (int position = 0; position < adapter.getCount(); position++)
-//        {
-//            if(adapter.getItemId(position) == value)
-//            {
-//                spnr.setSelection(position);
-//                return;
-//            }
-//        }
     }
 
     private void showToast(String msg) {
