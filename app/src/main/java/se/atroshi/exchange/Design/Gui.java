@@ -69,6 +69,14 @@ public class Gui extends AppCompatActivity {
 
     }
 
+    public Spinner getFromSpinner(){
+        return this.fromSpinner;
+    }
+
+    public Spinner getToSpinner(){
+        return this.toSpinner;
+    }
+
     public double getToRate() {
         return toRate;
     }
@@ -120,10 +128,6 @@ public class Gui extends AppCompatActivity {
 
         if(this.quantity > 0){
             result = (this.toRate / this.fromRate) * this.quantity;
-
-            //showToast(String.valueOf(this.fromRate) + " * " + String.valueOf(this.quantity));
-            //showToast(String.valueOf(cash) + " / " + String.valueOf(this.toRate));
-            //result = cash / this.toRate;
         }
 
         return result;
@@ -131,7 +135,6 @@ public class Gui extends AppCompatActivity {
 
     // add items into spinner dynamically
     public void addItemsOnSpinner(List<CubeXML> cubes) {
-
 
         // Add to the lists
         for(CubeXML cube: cubes){
@@ -153,40 +156,27 @@ public class Gui extends AppCompatActivity {
     }
 
 
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        //Put your values to restore...
-        savedInstanceState.putLong("fromSpinner", 2);
-        savedInstanceState.putLong("toSpinner", 3);
-    }
 
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState!= null) {
-            //get your values to restore...
-            this.fromRate = savedInstanceState.getLong("fromSpinner");
-            this.toRate = savedInstanceState.getLong("toSpinner");
-            showToast("Oncreate " + this.toRate);
-        }
-    }
 
     /**
      * http://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
      * @param spnr
      * @param value
      */
-    public static void selectSpinnerItemByValue(Spinner spnr, long value)
+    public void selectSpinnerItemByValue(Spinner spnr, int value)
     {
         SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
-        for (int position = 0; position < adapter.getCount(); position++)
-        {
-            if(adapter.getItemId(position) == value)
-            {
-                spnr.setSelection(position);
-                return;
-            }
-        }
+        spnr.setSelection(value);
+//
+//
+//        for (int position = 0; position < adapter.getCount(); position++)
+//        {
+//            if(adapter.getItemId(position) == value)
+//            {
+//                spnr.setSelection(position);
+//                return;
+//            }
+//        }
     }
 
     private void showToast(String msg) {

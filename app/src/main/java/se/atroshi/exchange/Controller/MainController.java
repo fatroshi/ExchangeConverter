@@ -19,21 +19,19 @@ public class MainController {
 
     private String tag = "MainController";
     private MainActivity mainActivity;
-    private Bundle bundle;
     private Database db;
     private CubeXmlPullParser parser;
     private StreamFromFile streamFromFile;
     private Gui gui;
 
 
-    public MainController(MainActivity mainActivity, Bundle bundle){
+    public MainController(MainActivity mainActivity){
         this.mainActivity = mainActivity;
-        this.bundle = bundle;
         // Connect to database
         this.db = new Database(this.mainActivity);
-
         //
-        gui = new Gui(this.mainActivity, this);
+        this.gui = new Gui(mainActivity,this);
+        //
         parser = new CubeXmlPullParser();
     }
 
@@ -117,5 +115,9 @@ public class MainController {
 
     public void showConvertedResult(){
         this.gui.showResult();
+    }
+
+    public Gui getGui(){
+        return this.gui;
     }
 }
