@@ -17,7 +17,7 @@ import java.util.List;
 
 import se.atroshi.exchange.Exchange.CubeXML;
 import se.atroshi.exchange.MainActivity;
-import se.atroshi.exchange.Settings;
+import se.atroshi.exchange.Settings.UpdateOptions;
 
 /**
  * Created by Farhad on 18/11/15.
@@ -26,7 +26,7 @@ public class Database {
 
     private String tag = "Database";
     private List<CubeXML> cubes;
-    private Settings settings;
+    private UpdateOptions settings;
     private String dbName;
     private MainActivity mainActivity;
 
