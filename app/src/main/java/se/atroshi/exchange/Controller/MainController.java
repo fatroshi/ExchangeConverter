@@ -43,6 +43,7 @@ public class MainController {
         if(db.isEmpty()){
             //
             Log.i(tag, "The database is empty we need stream url...");
+            showToast("Database is empty...");
             //
             this.updateApp();
         }else{
@@ -51,7 +52,6 @@ public class MainController {
             Date newDate = new Date();
 
             long hours = differenceInHours(oldDate,newDate);
-
             if(hours > 24){
                 Log.i(tag, "We need to update our data");
                 this.updateApp();

@@ -1,4 +1,5 @@
 package se.atroshi.exchange.Design;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -151,6 +152,24 @@ public class Gui extends AppCompatActivity {
         toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.controller,this));
     }
 
+
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        //Put your values to restore...
+        savedInstanceState.putLong("fromSpinner", 2);
+        savedInstanceState.putLong("toSpinner", 3);
+    }
+
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState!= null) {
+            //get your values to restore...
+            this.fromRate = savedInstanceState.getLong("fromSpinner");
+            this.toRate = savedInstanceState.getLong("toSpinner");
+            showToast("Oncreate " + this.toRate);
+        }
+    }
 
     /**
      * http://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically

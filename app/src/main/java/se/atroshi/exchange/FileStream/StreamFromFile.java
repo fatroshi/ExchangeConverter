@@ -18,8 +18,10 @@ import se.atroshi.exchange.MainActivity;
  */
 public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
 
-    private final String urlString = "http://www.ecb.europa.eu/stats/eurofxref/";
-    private final String fileName = "eurofxref-daily.xml";
+    private final String schoolURL = "http://maceo.sth.kth.se/Home/eurofxref";
+    private final String bankURL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+    private final String urlString = schoolURL  ;
+
 
     private String tag = "StreamFromFile";
     private MainActivity mainActivity;
@@ -38,7 +40,7 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
         URLConnection connection;
         BufferedReader in;
         try{
-            URL url = new URL(urlString+fileName);
+            URL url = new URL(urlString);
             connection = url.openConnection();
             in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             // XML PARSING
@@ -56,10 +58,8 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
     protected void onPostExecute(Long result)
     {
         showToast("Download finished");
-
-        this.gui.addItemsOnSpinner(this.cubeParser.getCubes());
-
         try {
+            this.gui.addItemsOnSpinner(this.cubeParser.getCubes());
             Database db = new Database(mainActivity);
             db.insert(this.cubeParser.getCubes());
         }catch (IOException e){
