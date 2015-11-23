@@ -11,6 +11,7 @@ public class CubeXML implements Serializable {
     private Date date;
     private double rate;
     private String currency;
+    private String img;
 
     public CubeXML(Date date, String currency, double rate){
         this.date = date;

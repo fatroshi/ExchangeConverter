@@ -1,10 +1,14 @@
 package se.atroshi.exchange.Design;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import junit.framework.Assert;
+
 import java.util.ArrayList;
 import java.util.List;
 import se.atroshi.exchange.Controller.MainController;
@@ -142,6 +146,9 @@ public class Gui extends AppCompatActivity {
         for(CubeXML cube: cubes){
             this.currencyList.add(cube.getCurrency());
             this.rateList.add(cube.getRate());
+            if(!cube.getCurrency().matches("try")) {
+                this.imageList.add(getDrawable(this.mainActivity, cube.getCurrency()));
+            }
         }
         // Populate the spinners
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this.mainActivity, android.R.layout.simple_spinner_item, currencyList);
@@ -150,7 +157,8 @@ public class Gui extends AppCompatActivity {
         // My custom adapter
         CustomAdapter customAdapter = new CustomAdapter(this.mainActivity,this.currencyList,this.imageList);
 
-        fromSpinner.setAdapter(dataAdapter);
+        //fromSpinner.setAdapter(dataAdapter);
+        fromSpinner.setAdapter(customAdapter);
         toSpinner.setAdapter(dataAdapter);
 
         // Get selected item in spinner list
@@ -160,7 +168,18 @@ public class Gui extends AppCompatActivity {
         toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.controller, this));
     }
 
-
+    /**
+     * http://stackoverflow.com/questions/7948059/dynamic-loading-of-images-r-drawable-using-variable
+     * @param context
+     * @param name
+     * @return
+     */
+    public static int getDrawable(Context context, String name)
+    {
+            Assert.assertNotNull(context);
+            Assert.assertNotNull(name);
+            return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
+    }
 
 
     /**
