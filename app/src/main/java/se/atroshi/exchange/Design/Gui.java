@@ -6,9 +6,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import junit.framework.Assert;
-
 import java.util.ArrayList;
 import java.util.List;
 import se.atroshi.exchange.Controller.MainController;
@@ -21,6 +19,7 @@ import se.atroshi.exchange.R;
 
 /**
  * Created by Farhad on 17/11/15.
+ * This class is used for the Gui i the application
  */
 public class Gui extends AppCompatActivity {
 
@@ -56,14 +55,25 @@ public class Gui extends AppCompatActivity {
     }
 
 
+    /**
+     * Return the rateList
+     * @return list of rates
+     */
     public List<Double> getRateList(){
         return this.rateList;
     }
 
+    /**
+     * Return currency list
+     * @return list of currencies
+     */
     public List<String> getCurrencyList(){
         return this.currencyList;
     }
 
+    /**
+     * Returns the converted result
+     */
     public void showResult(){
         double result = exchangeConvert();
         if(result > 0){
@@ -75,46 +85,89 @@ public class Gui extends AppCompatActivity {
 
     }
 
+    /**
+     * Return the fromSpinner
+     * @return spinner
+     */
     public Spinner getFromSpinner(){
         return this.fromSpinner;
     }
 
+    /**
+     * Return toSpinner
+     * @return spinner
+     */
     public Spinner getToSpinner(){
         return this.toSpinner;
     }
 
+    /**
+     * Return toRate
+     * @return
+     */
     public double getToRate() {
         return toRate;
     }
 
+    /**
+     * Set toCurrency
+     * @param s name of currency
+     */
     public void setToCurrency(String s){
         this.toCurrency = s;
     }
 
+    /**
+     * Returns toCurrency
+     * @return String
+     */
     public String getToCurrency(){
         return this.toCurrency;
     }
 
+    /**
+     * Set toRate
+     * @param toRate set value for toRate
+     */
     public void setToRate(double toRate) {
         this.toRate = toRate;
     }
 
+    /**
+     * Get fromRate
+     * @return fromRate
+     */
     public double getFromRate() {
         return fromRate;
     }
 
+    /**
+     * Set fromRate
+     * @param fromRate set value from Rate
+     */
     public void setFromRate(double fromRate) {
         this.fromRate = fromRate;
     }
 
+    /**
+     * Get quantity
+     * @return quantity
+     */
     public double getQuantity() {
         return quantity;
     }
 
+    /**
+     * Set quantity
+     * @param quantity set value for quantity
+     */
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
+    /**
+     * Connect widgets
+     */
     public void connectGuiElements(){
         this.txtResult = (TextView) this.mainActivity.findViewById(R.id.result);
         this.txtQuantity = (EditText) this.mainActivity.findViewById(R.id.inputText);
@@ -127,6 +180,10 @@ public class Gui extends AppCompatActivity {
     }
 
 
+    /**
+     * Return the result of the converted result
+     * @return result
+     */
     public double exchangeConvert(){
 
         //double cash = 0;
@@ -139,6 +196,10 @@ public class Gui extends AppCompatActivity {
         return result;
     }
 
+    /**
+     * Creates the spinnes, currency list, rate list and image list, uses CustomAdaper
+     * @param cubes list of cubes
+     */
     // add items into spinner dynamically
     public void addItemsOnSpinner(List<CubeXML> cubes) {
 
@@ -146,9 +207,24 @@ public class Gui extends AppCompatActivity {
         for(CubeXML cube: cubes){
             this.currencyList.add(cube.getCurrency());
             this.rateList.add(cube.getRate());
-            if(!cube.getCurrency().matches("try")) {
-                this.imageList.add(getDrawable(this.mainActivity, cube.getCurrency()));
+
+            int id = 0;
+            try {
+                String imgName = cube.getCurrency().toLowerCase();
+
+                if(imgName.equalsIgnoreCase("try")){
+                    imgName = "turkey";
+                }
+
+                id = R.drawable.class.getField(imgName  ).getInt(null);
+                this.imageList.add(id);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
             }
+
+
         }
         // Populate the spinners
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this.mainActivity, android.R.layout.simple_spinner_item, currencyList);
@@ -159,7 +235,7 @@ public class Gui extends AppCompatActivity {
 
         //fromSpinner.setAdapter(dataAdapter);
         fromSpinner.setAdapter(customAdapter);
-        toSpinner.setAdapter(dataAdapter);
+        toSpinner.setAdapter(customAdapter);
 
         // Get selected item in spinner list
         fromSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.controller,this));
