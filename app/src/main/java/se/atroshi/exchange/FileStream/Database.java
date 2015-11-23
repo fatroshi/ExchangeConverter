@@ -17,21 +17,24 @@ import java.util.List;
 
 import se.atroshi.exchange.Exchange.CubeXML;
 import se.atroshi.exchange.MainActivity;
-import se.atroshi.exchange.Settings.UpdateOptions;
+import se.atroshi.exchange.Settings.SettingOptions;
 
 /**
  * Created by Farhad on 18/11/15.
  */
 public class Database {
 
+    public static final String XML_PARSER = "XmlParser";
+    public static final String SETTING_OPTIONS = "Settings";
+
     private String tag = "Database";
     private List<CubeXML> cubes;
-    private UpdateOptions updateOptions;
+    private SettingOptions settingOptions;
     private String dbName;
     private MainActivity mainActivity;
 
-    public Database(MainActivity mainActivity) {
-        this.dbName = "db";
+    public Database(MainActivity mainActivity, String dbName) {
+        this.dbName = dbName;
         this.cubes = new ArrayList<>();
         this.mainActivity = mainActivity;
 
@@ -81,7 +84,12 @@ public class Database {
         try {
             FileInputStream fis = mainActivity.openFileInput(this.dbName);
             ObjectInputStream is = new ObjectInputStream(fis);
-            this.cubes = (List<CubeXML>) is.readObject();
+            if(this.dbName.equalsIgnoreCase("XmlParser")){
+                this.cubes = (List<CubeXML>) is.readObject();
+            }else if(this.dbName.equalsIgnoreCase("Settings")){
+                this.settingOptions = (SettingOptions) is.readObject();
+            }
+
             is.close();
             fis.close();
         } catch (ClassNotFoundException e) {
@@ -100,11 +108,10 @@ public class Database {
         fos.close();
     }
 
-    public void insertSettings(UpdateOptions options){
+    public void insertSettings(SettingOptions options){
         output("Insert settings");
-        String dbName = "settings";
         try {
-            FileOutputStream fos = mainActivity.openFileOutput(dbName, Context.MODE_PRIVATE);
+            FileOutputStream fos = mainActivity.openFileOutput(this.dbName, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(options);
             os.close();
@@ -162,13 +169,14 @@ public class Database {
         Log.i(tag, s);
     }
 
-    public UpdateOptions getUpdateOptions(){
-        return this.updateOptions;
+    public SettingOptions getSettingOptions(){
+        return this.settingOptions;
     }
 
     private void showToast(String msg) {
         Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
         toast.show();
     }
+
 
 }

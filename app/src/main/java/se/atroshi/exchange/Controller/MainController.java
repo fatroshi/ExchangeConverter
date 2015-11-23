@@ -11,6 +11,7 @@ import se.atroshi.exchange.Exchange.CubeXmlPullParser;
 import se.atroshi.exchange.FileStream.Database;
 import se.atroshi.exchange.FileStream.StreamFromFile;
 import se.atroshi.exchange.MainActivity;
+import se.atroshi.exchange.Settings.SettingOptions;
 
 /**
  * Created by Farhad on 18/11/15.
@@ -28,7 +29,7 @@ public class MainController {
     public MainController(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         // Connect to database
-        this.db = new Database(this.mainActivity);
+        this.db = new Database(this.mainActivity, Database.XML_PARSER);
         //
         this.gui = new Gui(mainActivity,this);
         //
@@ -50,7 +51,19 @@ public class MainController {
             Date newDate = new Date();
 
             long hours = differenceInHours(oldDate,newDate);
-            if(hours > 24){
+
+            // Load settings
+            Database dbSettings = new Database(this.mainActivity, Database.SETTING_OPTIONS);
+            SettingOptions settingOptions = dbSettings.getSettingOptions();
+
+            int updateTimeInterval = 24;
+
+            if(settingOptions != null){
+                updateTimeInterval = settingOptions.getUpdateInterval();
+                showToast(String.valueOf(updateTimeInterval));
+            }
+
+            if(hours > updateTimeInterval){
                 Log.i(tag, "We need to update our data");
                 this.updateApp();
             }else{

@@ -60,7 +60,7 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
         showToast("Download finished");
         try {
             this.gui.addItemsOnSpinner(this.cubeParser.getCubes());
-            Database db = new Database(mainActivity);
+            Database db = new Database(mainActivity,Database.XML_PARSER);
             db.insert(this.cubeParser.getCubes());
         }catch (IOException e){
             e.printStackTrace();
