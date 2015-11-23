@@ -92,12 +92,29 @@ public class Database {
     }
 
     public void insert(List<CubeXML> cubes) throws IOException {
-        output("Insert method");
+        output("Insert List<CubeXML> cubes");
         FileOutputStream fos = mainActivity.openFileOutput(dbName, Context.MODE_PRIVATE);
         ObjectOutputStream os = new ObjectOutputStream(fos);
         os.writeObject(cubes);
         os.close();
         fos.close();
+    }
+
+    public void insertSettings(UpdateOptions options){
+        output("Insert settings");
+        try {
+            FileOutputStream fos = mainActivity.openFileOutput(dbName, Context.MODE_APPEND);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(options);
+            os.close();
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public List<CubeXML> getCubes(){

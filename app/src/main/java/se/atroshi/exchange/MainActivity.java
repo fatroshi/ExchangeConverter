@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.widget.Spinner;
 import android.widget.Toast;
 import se.atroshi.exchange.Controller.MainController;
+import se.atroshi.exchange.FileStream.Database;
+import se.atroshi.exchange.Settings.UpdateOptions;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         controller = new MainController(this);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data){
 
@@ -33,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
                 int seekBarUpdateInterval = data.getIntExtra("seekBarUpdateInterval", 24);
                 boolean switchUpdate = data.getBooleanExtra("switchUpdate", true);
                 showToast("Result: switchUpdate " + switchUpdate + " seekBar " + seekBarUpdateInterval);
+
+                // Create OptionUpdate object
+                UpdateOptions updateOptions = new UpdateOptions(switchUpdate,seekBarUpdateInterval);
+                // Append to DB CLASS
+                this.controller.getDatabase().insertSettings(updateOptions);
+
             }
         }
 

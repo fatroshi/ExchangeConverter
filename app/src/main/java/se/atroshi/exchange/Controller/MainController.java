@@ -120,4 +120,8 @@ public class MainController {
     public Gui getGui(){
         return this.gui;
     }
+
+    public Database getDatabase(){
+        return this.db;
+    }
 }
