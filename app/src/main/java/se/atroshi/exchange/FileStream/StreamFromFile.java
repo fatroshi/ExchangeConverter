@@ -28,23 +28,34 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
     private CubeXmlPullParser cubeParser;
     private Gui gui;
 
+    private AsyncTask<URL, Integer, Long> task;
+
     public StreamFromFile(MainActivity currentActivity, CubeXmlPullParser cubeParser, Gui gui) {
         this.mainActivity = currentActivity;
         this.cubeParser = cubeParser;
         this.gui = gui;
+        this.task = this;
     }
 
+
+    public AsyncTask<URL, Integer, Long> getTask(){
+        return this.task;
+    }
 
     @Override
     protected Long doInBackground(URL... params) {
         URLConnection connection;
         BufferedReader in;
         try{
-            URL url = new URL(urlString);
-            connection = url.openConnection();
-            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            // XML PARSING
-            this.cubeParser.getXmlFromStream(in);
+            if(this.isCancelled()) {
+                showToast("Task is cancelled");
+            }else{
+                URL url = new URL(urlString);
+                connection = url.openConnection();
+                in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                // XML PARSING
+                this.cubeParser.getXmlFromStream(in);
+            }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

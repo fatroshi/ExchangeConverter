@@ -1,9 +1,7 @@
 package se.atroshi.exchange.Design;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +30,7 @@ public class Gui extends AppCompatActivity {
     private EditText txtQuantity;
 
 
+
     private String toCurrency;
     private double toRate;
     private double fromRate;
@@ -41,11 +40,14 @@ public class Gui extends AppCompatActivity {
     private final List<String> currencyList = new ArrayList<>();
     // Store rate
     private final List<Double> rateList = new ArrayList<>();
+    // Store country flags (images)
+    private List<Integer> imageList = new ArrayList<>();
 
 
     public Gui(MainActivity mainActivity, MainController controller){
         this.mainActivity = mainActivity;
         this.controller = controller;
+
         this.connectGuiElements();
     }
 
@@ -145,6 +147,9 @@ public class Gui extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this.mainActivity, android.R.layout.simple_spinner_item, currencyList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        // My custom adapter
+        CustomAdapter customAdapter = new CustomAdapter(this.mainActivity,this.currencyList,this.imageList);
+
         fromSpinner.setAdapter(dataAdapter);
         toSpinner.setAdapter(dataAdapter);
 
@@ -152,7 +157,7 @@ public class Gui extends AppCompatActivity {
         fromSpinner.setOnItemSelectedListener(new FromSpinnerListener(this.controller,this));
 
         // Get selected item in spinner list
-        toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.controller,this));
+        toSpinner.setOnItemSelectedListener(new ToSpinnerListener(this.controller, this));
     }
 
 

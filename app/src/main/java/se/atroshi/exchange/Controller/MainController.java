@@ -34,45 +34,37 @@ public class MainController {
         this.gui = new Gui(mainActivity,this);
         //
         parser = new CubeXmlPullParser();
+        //
+        streamFromFile = null;
+
     }
 
-    public boolean update(){
-        boolean update = false;
-
-        if(db.isEmpty()){
-            //
-            Log.i(tag, "The database is empty we need stream url...");
-            showToast("Database is empty...");
-            //
-            this.updateApp();
-        }else{
-
-            Date oldDate = db.getTimeStamp();
-            Date newDate = new Date();
-
-            long hours = differenceInHours(oldDate,newDate);
-
-            // Load settings
-            Database dbSettings = new Database(this.mainActivity, Database.SETTING_OPTIONS);
-            SettingOptions settingOptions = dbSettings.getSettingOptions();
-
-            int updateTimeInterval = 24;
-
-            if(settingOptions != null){
-                updateTimeInterval = settingOptions.getUpdateInterval();
-                showToast(String.valueOf(updateTimeInterval));
-            }
-
-            if(hours > updateTimeInterval){
-                Log.i(tag, "We need to update our data");
+    public void update(boolean isUpdate, int updateTimeInterval){
+            if (db.isEmpty()) {
+                //
+                Log.i(tag, "The database is empty we need stream url...");
+                showToast("Database is empty...");
+                //
                 this.updateApp();
-            }else{
-                gui.addItemsOnSpinner(db.getCubes());
+            } else {
+
+                if(isUpdate) {
+
+                    Date oldDate = db.getTimeStamp();
+                    Date newDate = new Date();
+                    long hours = differenceInHours(oldDate, newDate);
+                    //int updateTimeInterval = 24;
+                    if (hours > updateTimeInterval) {
+                        Log.i(tag, "We need to update our data");
+                        this.updateApp();
+                    }else{
+                        gui.addItemsOnSpinner(db.getCubes());
+                    }
+                }else{
+                    gui.addItemsOnSpinner(db.getCubes());
+                }
+
             }
-
-        }
-
-        return update;
     }
 
     public void updateApp(){
@@ -91,8 +83,6 @@ public class MainController {
             }else{
                 showToast("Please connect to the internet...");
             }
-
-
         }
     }
 
@@ -134,7 +124,8 @@ public class MainController {
         return this.gui;
     }
 
-    public Database getDatabase(){
-        return this.db;
+    public StreamFromFile getStreamFromFile(){
+        return this.streamFromFile;
     }
+
 }

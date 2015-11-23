@@ -1,5 +1,6 @@
 package se.atroshi.exchange;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +13,6 @@ import se.atroshi.exchange.FileStream.Database;
 import se.atroshi.exchange.Settings.SettingOptions;
 
 public class MainActivity extends AppCompatActivity {
-
     private final int REQUEST_CODE_SETTINGS = 100;
     private final String tag = "MainActivity";
     private MainController controller;
@@ -27,6 +27,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+        // Get user settings
+        Database dbSettings = new Database(this, Database.SETTING_OPTIONS);
+        int updateTimeInterval =  dbSettings.getSettingOptions().getUpdateInterval();
+        boolean update = dbSettings.getSettingOptions().isUpdate();
+
+        // Check if we have old data
+        // Update database, gui if we have old data
+        controller.update(update, updateTimeInterval);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        try{
+            if(this.controller.getStreamFromFile() != null) {
+                //this.controller.getStreamFromFile().getTask().cancel(true);
+                if(this.controller.getStreamFromFile().getTask().getStatus() == AsyncTask.Status.RUNNING){
+                    this.controller.getStreamFromFile().getTask().cancel(true);
+                }
+            }
+        }catch (NullPointerException e){
+            showToast("The task is done");
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data){
 
         if(requestCode == REQUEST_CODE_SETTINGS){
@@ -37,13 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 // Create OptionUpdate object
                 SettingOptions settingOptions = new SettingOptions(switchUpdate,seekBarUpdateInterval);
                 // Update database
-                Database dbSettings = new Database(this, "settings");
+                Database dbSettings = new Database(this, Database.SETTING_OPTIONS);
                 dbSettings.insertSettings(settingOptions);
-
             }
         }
 
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -72,18 +103,6 @@ public class MainActivity extends AppCompatActivity {
         this.controller.getGui().selectSpinnerItemByValue(fromSpinner, fromSpinnerPosition);
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        // Check if we have old data
-        // Update database, gui if we have old data
-        controller.update();
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,15 +121,16 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             //showToast("Settings Selected");
-
             Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+            Database dbSettings = new Database(this, Database.SETTING_OPTIONS);
+            boolean switchUpdate = dbSettings.getSettingOptions().isUpdate();
+            int seekBarUpdateInterval = dbSettings.getSettingOptions().getUpdateInterval();
 
-
-            startActivityForResult(intent,REQUEST_CODE_SETTINGS);
-
+            intent.putExtra("seekBarUpdateInterval", seekBarUpdateInterval);
+            intent.putExtra("switchUpdate",switchUpdate );
+            startActivityForResult(intent, REQUEST_CODE_SETTINGS);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

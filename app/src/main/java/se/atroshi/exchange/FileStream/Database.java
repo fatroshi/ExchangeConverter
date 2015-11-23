@@ -45,7 +45,6 @@ public class Database {
         }
     }
 
-
     public boolean dbExists() throws IOException {
         boolean dbExists = false;
 
@@ -53,9 +52,9 @@ public class Database {
 
         if(file.exists()){
             dbExists = true;
-            Log.i(tag, "File does EXIST");
+            Log.i(tag, "DB" + this.dbName + " EXIST");
         }else{
-            Log.i(tag, "File does NOT EXIST");
+            Log.i(tag, "DB" + this.dbName + " does NOT EXIST");
             // Create database
             createDatabase();
 
@@ -66,7 +65,7 @@ public class Database {
     public void createDatabase(){
         try {
             FileOutputStream fos = mainActivity.openFileOutput(this.dbName, Context.MODE_PRIVATE);
-            Log.i(tag, "New database file created");
+            Log.i(tag, "New database " + this.dbName + " created");
             try{
                 fos.close();
             }catch (IOException e){
@@ -80,16 +79,23 @@ public class Database {
     }
 
     public void getData() throws IOException {
-
         try {
             FileInputStream fis = mainActivity.openFileInput(this.dbName);
             ObjectInputStream is = new ObjectInputStream(fis);
-            if(this.dbName.equalsIgnoreCase("XmlParser")){
+            if(this.dbName.equalsIgnoreCase(Database.XML_PARSER)){
                 this.cubes = (List<CubeXML>) is.readObject();
-            }else if(this.dbName.equalsIgnoreCase("Settings")){
+            }else if(this.dbName.equalsIgnoreCase(Database.SETTING_OPTIONS)){
                 this.settingOptions = (SettingOptions) is.readObject();
-            }
 
+                // Check if we have saved settings
+                if(this.settingOptions == null){
+                    // First time, settings never saved
+                    // create default settings
+                    this.settingOptions = new SettingOptions(true,24);
+                    // Store in settings db
+                    this.insertSettings(this.settingOptions);
+                }
+            }
             is.close();
             fis.close();
         } catch (ClassNotFoundException e) {
@@ -170,7 +176,17 @@ public class Database {
     }
 
     public SettingOptions getSettingOptions(){
-        return this.settingOptions;
+        SettingOptions settingOptions = null;
+
+        try {
+            // Load in the data from file
+            this.getData();
+
+            settingOptions = this.settingOptions;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return settingOptions;
     }
 
     private void showToast(String msg) {
