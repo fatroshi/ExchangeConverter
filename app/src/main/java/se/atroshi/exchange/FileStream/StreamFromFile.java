@@ -15,6 +15,7 @@ import se.atroshi.exchange.MainActivity;
 
 /**
  * Created by Farhad on 11/11/15.
+ * This class is used for streaming content from URL, and by using the class CubeXmlParser parsing the xml.
  */
 public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
 
@@ -42,6 +43,12 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
         return this.task;
     }
 
+    /**
+     * This function is used when whe need to update the database (spinners).
+     * Runs as a parallel thread.
+     * @param params
+     * @return
+     */
     @Override
     protected Long doInBackground(URL... params) {
         URLConnection connection;
@@ -66,6 +73,11 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
         return null;
     }
 
+    /**
+     * When the method doInBackground is finished this method is called
+     * In this method we update the database and gui (spinners)
+     * @param result
+     */
     protected void onPostExecute(Long result)
     {
         showToast("Download finished");
@@ -79,13 +91,14 @@ public class StreamFromFile extends AsyncTask<URL,Integer,Long> {
 
     }
 
+    /**
+     * Used for displaying messages to the user on the screen
+     * @param msg
+     */
     private void showToast(String msg) {
         Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
         toast.show();
     }
 
-    public void output(String s){
-        Log.i(this.tag, s);
-    }
 
 }

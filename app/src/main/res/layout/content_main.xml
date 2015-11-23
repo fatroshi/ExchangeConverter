@@ -19,22 +19,24 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:ems="5"
             android:id="@+id/inputText"
-            android:layout_above="@+id/textView"
-            android:layout_alignParentStart="true"
             android:textStyle="bold"
-            android:maxWidth="10dp"
+            android:maxWidth="5dp"
             android:maxLength="10"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:layout_below="@+id/toSpinner"
+            android:layout_alignParentStart="true"
+            android:hint="Quantity..."
+            android:textColor="#2141a9" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fromSpinner"
-            android:layout_above="@+id/textView2"
-            android:layout_alignParentStart="true"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:layout_below="@+id/textView"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,16 +44,16 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="From"
             android:id="@+id/textView"
-            android:layout_above="@+id/fromSpinner"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/toSpinner"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:layout_below="@+id/textView2"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,26 +61,17 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="To"
             android:id="@+id/textView2"
-            android:layout_above="@+id/toSpinner"
+            android:layout_below="@+id/fromSpinner"
             android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Quantity to be converted"
-            android:id="@+id/textView3"
-            android:layout_above="@+id/inputText"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Quantity"
             android:id="@+id/result"
-            android:layout_below="@+id/toSpinner"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="36dp" />
+            android:layout_alignBottom="@+id/inputText"
+            android:layout_toEndOf="@+id/inputText" />
 
     </RelativeLayout>
 

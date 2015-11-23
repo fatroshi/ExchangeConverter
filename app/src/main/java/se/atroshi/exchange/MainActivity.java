@@ -12,11 +12,24 @@ import se.atroshi.exchange.Controller.MainController;
 import se.atroshi.exchange.FileStream.Database;
 import se.atroshi.exchange.Settings.SettingOptions;
 
-public class MainActivity extends AppCompatActivity {
-    private final int REQUEST_CODE_SETTINGS = 100;
-    private final String tag = "MainActivity";
-    private MainController controller;
+/**
+ * Created by Farhad on 18/11/15.
+ * This is the mainActivity and the start point of the application.
+ * Handles the different lifecycle states of the application and also sending data to other activities.
+ *
+ * The controller class is also created here.
+ */
 
+public class MainActivity extends AppCompatActivity {
+    private final int REQUEST_CODE_SETTINGS = 100;          // Used as an id for the data received from SettingsActivy
+    private final String tag = "MainActivity";              // Tag, using it in Log.i(tag ....
+    private MainController controller;                      // App controller class
+
+
+    /**
+     * Creates the application controller
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         controller = new MainController(this);
     }
 
+    /**
+     * Load settings for the app
+     * Check if we need to update the database and gui
+     */
     @Override
     protected void onStart(){
         super.onStart();
@@ -39,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         controller.update(update, updateTimeInterval);
     }
 
+    /**
+     * Cancel download if the application is not current app in the phone (example. user has pressed back btn)
+     */
     @Override
     protected void onPause(){
         super.onPause();
@@ -58,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Retrieve data from SettingsActivity , store in Database
+     * @param requestCode code use for detecting if was sent to this class/methdd
+     * @param resultCode  if the result was ok
+     * @param data Data sent from from SettingsActivity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode,Intent data){
 
@@ -77,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Save spinner position before rotating
+     * @param savedInstanceState
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -89,6 +119,10 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putInt("fromSpinner", fromSpinner.getSelectedItemPosition());
     }
 
+    /**
+     * Restore spinners item position (the selected item before rotating)
+     * @param savedInstanceState
+     */
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -111,6 +145,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Send data to the SettingsActivity, this data is used by the widgets for showing
+     * correct status/values.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

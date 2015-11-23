@@ -205,7 +205,7 @@ public class Gui extends AppCompatActivity {
 
         // Add to the lists
         for(CubeXML cube: cubes){
-            this.currencyList.add(cube.getCurrency());
+            this.currencyList.add(cube.getCurrency() + "    ");
             this.rateList.add(cube.getRate());
 
             int id = 0;
@@ -216,7 +216,7 @@ public class Gui extends AppCompatActivity {
                     imgName = "turkey";
                 }
 
-                id = R.drawable.class.getField(imgName  ).getInt(null);
+                id = R.drawable.class.getField(imgName).getInt(null);
                 this.imageList.add(id);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

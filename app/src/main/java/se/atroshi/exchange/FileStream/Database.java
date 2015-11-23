@@ -21,6 +21,7 @@ import se.atroshi.exchange.Settings.SettingOptions;
 
 /**
  * Created by Farhad on 18/11/15.
+ * This class is used for storing data and retrieving data.
  */
 public class Database {
 
@@ -45,6 +46,11 @@ public class Database {
         }
     }
 
+    /**
+     * Check if database exists
+     * @return true if it exists, false if not
+     * @throws IOException
+     */
     public boolean dbExists() throws IOException {
         boolean dbExists = false;
 
@@ -62,6 +68,9 @@ public class Database {
         return dbExists;
     }
 
+    /**
+     * Create the database file
+     */
     public void createDatabase(){
         try {
             FileOutputStream fos = mainActivity.openFileOutput(this.dbName, Context.MODE_PRIVATE);
@@ -78,6 +87,10 @@ public class Database {
         }
     }
 
+    /**
+     * Load in data depending of choosen database
+     * @throws IOException
+     */
     public void getData() throws IOException {
         try {
             FileInputStream fis = mainActivity.openFileInput(this.dbName);
@@ -105,6 +118,11 @@ public class Database {
 
     }
 
+    /**
+     * Store data in the database file
+     * @param cubes save data is a list of CubeXML objects
+     * @throws IOException
+     */
     public void insert(List<CubeXML> cubes) throws IOException {
         output("Insert List<CubeXML> cubes");
         FileOutputStream fos = mainActivity.openFileOutput(dbName, Context.MODE_PRIVATE);
@@ -114,6 +132,10 @@ public class Database {
         fos.close();
     }
 
+    /**
+     * Store data in the database file
+     * @param options Saved data is Objects of SettingOptions
+     */
     public void insertSettings(SettingOptions options){
         output("Insert settings");
         try {
@@ -131,6 +153,10 @@ public class Database {
 
     }
 
+    /**
+     * Return data from database
+     * @return List of CubeXML
+     */
     public List<CubeXML> getCubes(){
         List<CubeXML> tmpCubes = null;
         try {
@@ -143,6 +169,10 @@ public class Database {
         return tmpCubes;
     }
 
+    /**
+     * Return the date of the stored objects
+     * @return date
+     */
     public Date getTimeStamp(){
 
         Date date = null;
@@ -155,6 +185,11 @@ public class Database {
         return date;
     }
 
+    /**
+     * Check if the returned data is empty
+     * Basically checks if we have stored any data before
+     * @return
+     */
     public boolean isEmpty(){
 
         boolean isEmpty = true;
@@ -171,10 +206,18 @@ public class Database {
         return isEmpty;
     }
 
+    /**
+     * Just easier to use than Log.i(tag, "String")
+     * @param s message
+     */
     public void output(String s){
         Log.i(tag, s);
     }
 
+    /**
+     * Return the stored settingOptions
+     * @return SettingOptions object that contains the user configs.
+     */
     public SettingOptions getSettingOptions(){
         SettingOptions settingOptions = null;
 
@@ -188,11 +231,5 @@ public class Database {
         }
         return settingOptions;
     }
-
-    private void showToast(String msg) {
-        Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
 
 }

@@ -21,6 +21,7 @@ import se.atroshi.exchange.FileStream.StreamFromFile;
 
 /**
  * Created by Farhad on 11/11/15.
+ * This class is used for parsing the xml
  */
 
 public class CubeXmlPullParser implements Serializable {
@@ -36,6 +37,11 @@ public class CubeXmlPullParser implements Serializable {
         return cubes;
     }
 
+
+    /**
+     * Parse data from the stream
+     * @param reader stream fom url
+     */
     public void getXmlFromStream (BufferedReader reader){
 
         String tmpDate = null;
@@ -97,6 +103,11 @@ public class CubeXmlPullParser implements Serializable {
 
     }
 
+    /**
+     * Creates a date object
+     * @param strDate date in form of a string
+     * @return date object
+     */
     public Date createDate(String strDate){
 
         Date date = null;

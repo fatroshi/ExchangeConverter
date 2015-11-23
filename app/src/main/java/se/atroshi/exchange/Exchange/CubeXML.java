@@ -19,31 +19,58 @@ public class CubeXML implements Serializable {
         this.currency = currency;
     }
 
+    /**
+     * Get date
+     * @return date
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Set date
+     * @param date date
+     */
     public void setDate(Date date) {
         this.date = date;
     }
 
+    /**
+     * Get rate for the object
+     * @return rate
+     */
     public double getRate() {
         return rate;
     }
 
+    /**
+     * Set rate
+     * @param rate set rate value
+     */
     public void setRate(double rate) {
         this.rate = rate;
     }
 
+    /**
+     * Get currency
+     * @return currency
+     */
     public String getCurrency() {
         return currency;
     }
 
+    /**
+     * Set currency
+     * @param currency set value (string) for currency
+     */
     public void setCurrency(String currency) {
         this.currency = currency;
     }
 
-
+    /**
+     * Return all info abour this object
+     * @return information about the object
+     */
     @Override
     public String toString(){
         String info = "";

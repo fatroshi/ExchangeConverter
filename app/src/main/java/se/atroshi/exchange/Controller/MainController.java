@@ -39,6 +39,12 @@ public class MainController {
 
     }
 
+    /**
+     * Check if we need to update the app by getting xml data from url
+     * Populates the spinners
+     * @param isUpdate
+     * @param updateTimeInterval
+     */
     public void update(boolean isUpdate, int updateTimeInterval){
             if (db.isEmpty()) {
                 //
@@ -67,6 +73,9 @@ public class MainController {
             }
     }
 
+    /**
+     * Updated the app by streaming xml from url
+     */
     public void updateApp(){
         // Check if we have internet
         if(isOnline()) {
@@ -92,6 +101,12 @@ public class MainController {
      * @param endDate
      */
 
+    /**
+     * I used to compare two dates and get the difference in hours
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public long differenceInHours(Date startDate, Date endDate){
 
         long different = endDate.getTime() - startDate.getTime();
@@ -104,6 +119,10 @@ public class MainController {
 
     }
 
+    /**
+     * Check if we are connected to the internet
+     * @return true if we are connected, false if we are not
+     */
     public boolean isOnline() {
         String context = Context.CONNECTIVITY_SERVICE;
         ConnectivityManager cm = (ConnectivityManager) mainActivity.getSystemService(context);
@@ -111,19 +130,34 @@ public class MainController {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    /**
+     * Shows messages in the app
+     * @param msg
+     */
     private void showToast(String msg) {
         Toast toast = Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT);
         toast.show();
     }
 
+    /**
+     * Calls a method in gui to display the result
+     */
     public void showConvertedResult(){
         this.gui.showResult();
     }
 
+    /**
+     * Returns the gui
+     * @return Gui object
+     */
     public Gui getGui(){
         return this.gui;
     }
 
+    /**
+     * Returns the the object
+     * @return StreamFile object
+     */
     public StreamFromFile getStreamFromFile(){
         return this.streamFromFile;
     }
