@@ -26,7 +26,7 @@ public class Database {
 
     private String tag = "Database";
     private List<CubeXML> cubes;
-    private UpdateOptions settings;
+    private UpdateOptions updateOptions;
     private String dbName;
     private MainActivity mainActivity;
 
@@ -102,8 +102,9 @@ public class Database {
 
     public void insertSettings(UpdateOptions options){
         output("Insert settings");
+        String dbName = "settings";
         try {
-            FileOutputStream fos = mainActivity.openFileOutput(dbName, Context.MODE_APPEND);
+            FileOutputStream fos = mainActivity.openFileOutput(dbName, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(options);
             os.close();
@@ -159,6 +160,10 @@ public class Database {
 
     public void output(String s){
         Log.i(tag, s);
+    }
+
+    public UpdateOptions getUpdateOptions(){
+        return this.updateOptions;
     }
 
     private void showToast(String msg) {
