@@ -1,4 +1,5 @@
 package se.atroshi.exchange;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import se.atroshi.exchange.Controller.MainController;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int REQUEST_CODE_SETTINGS = 100;
     private final String tag = "MainActivity";
     private MainController controller;
 
@@ -20,6 +22,21 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         controller = new MainController(this);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,Intent data){
+
+        if(requestCode == REQUEST_CODE_SETTINGS){
+            if(resultCode == RESULT_OK){
+                int seekBarUpdateInterval = data.getIntExtra("seekBarUpdateInterval", 24);
+                boolean switchUpdate = data.getBooleanExtra("switchUpdate", true);
+                showToast("Result: switchUpdate " + switchUpdate + " seekBar " + seekBarUpdateInterval);
+            }
+        }
+
+        super.onActivityResult(requestCode,resultCode,data);
     }
 
     @Override
@@ -77,6 +94,13 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //showToast("Settings Selected");
+
+            Intent intent = new Intent(getApplicationContext(),SettingsActivity.class);
+
+
+            startActivityForResult(intent,REQUEST_CODE_SETTINGS);
+
             return true;
         }
 
